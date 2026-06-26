@@ -17,6 +17,7 @@ namespace InventoryManagementSystem.Forms
         public DashboardForm()
         {
             InitializeComponent();
+            timerClock.Start();
             LoadDashboard();
         }
         private void LoadDashboard()
@@ -27,6 +28,18 @@ namespace InventoryManagementSystem.Forms
             lblTotalStock.Text = _dashboardRepository.GetTotalStock().ToString();
             lblTotalInventoryValue.Text = "Rs. " + _dashboardRepository.GetInventoryValue().ToString("N2");
             dgvLowStock.DataSource = _dashboardRepository.GetLowStockProducts();
+            dgvRecentlyAddedProducts.DataSource = _dashboardRepository.GetRecentProducts();
+        }
+
+        private void timerClock_Tick(object sender, EventArgs e)
+        {
+            lblDateTime.Text = DateTime.Now.ToString("dddd, dd MMMM yyyy  hh:mm:ss tt");
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadDashboard();
+            MessageBox.Show("Dashboard refreshed successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

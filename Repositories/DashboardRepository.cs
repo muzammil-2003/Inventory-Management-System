@@ -69,5 +69,17 @@ namespace InventoryManagementSystem.Repositories
                 return table;
             }
         }
+        public DataTable GetRecentProducts()
+        {
+            using (SqlConnection conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            {
+                conn.Open();
+                string query = "SELECT TOP 10 Name, Price, Quantity FROM Products ORDER BY Id DESC";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return table;
+            }
+        }
     }
 }
