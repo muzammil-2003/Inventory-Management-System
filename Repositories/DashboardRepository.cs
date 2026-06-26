@@ -1,6 +1,7 @@
 ﻿using InventoryManagementSystem.Database;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Data;
 
 namespace InventoryManagementSystem.Repositories
 {
@@ -23,7 +24,7 @@ namespace InventoryManagementSystem.Repositories
                 conn.Open();
                 string query = "SELECT COUNT(*) FROM Categories";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                return Convert.ToInt32(command.ExecuteScalar());
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public int GetTotalSuppliers()
@@ -33,7 +34,7 @@ namespace InventoryManagementSystem.Repositories
                 conn.Open();
                 string query = "SELECT COUNT(*) FROM Suppliers";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                return Convert.ToInt32(command.ExecuteScalar());
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public int GetTotalStock()
@@ -43,7 +44,7 @@ namespace InventoryManagementSystem.Repositories
                 conn.Open();
                 string query = "SELECT ISNULL(SUM(Quantity), 0) FROM Products";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                return Convert.ToInt32(command.ExecuteScalar());
+                return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
         public decimal GetInventoryValue()
@@ -54,6 +55,18 @@ namespace InventoryManagementSystem.Repositories
                 string query = "SELECT ISNULL(SUM(Price * Quantity),0) FROM Products";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+        public DataTable GetLowStockProducts(int threshold=3)
+        {
+            using (SqlConnection conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            {
+                string query = "SELECT Name, Quantity FROM Products WHERE Quantity <= @Threshold ORDER BY Quantity ASC";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                adapter.SelectCommand.Parameters.AddWithValue("@Threshold", threshold);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return table;
             }
         }
     }
