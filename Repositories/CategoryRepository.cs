@@ -67,5 +67,16 @@ namespace InventoryManagementSystem.Repositories
                 return table;
             }
         }
+        public DataTable GetCategories()
+        {
+            using (SqlConnection conn = new SqlConnection(DatabaseHelper.ConnectionString))
+            {
+                string query = "SELECT Id, Name FROM Categories";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return table;
+            }
+        }
     }
 }
