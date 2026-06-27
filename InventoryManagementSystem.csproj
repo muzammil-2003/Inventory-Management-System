@@ -226,6 +226,9 @@
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\SupplierRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <EmbeddedResource Include="Forms\BillingForm.resx">
+      <DependentUpon>BillingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CategoryForm.resx">
       <DependentUpon>CategoryForm.cs</DependentUpon>
     </EmbeddedResource>
