@@ -50,7 +50,7 @@ namespace InventoryManagementSystem.Repositories
                 string query = "DELETE FROM Customers WHERE Id = @Id";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", id);
-                cmd.EndExecuteNonQuery();
+                cmd.ExecuteNonQuery();
             }
         }
         public DataTable SearchCustomer(string keyword)
