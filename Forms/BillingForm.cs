@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories;
+using InventoryManagementSystem.Services;
 
 namespace InventoryManagementSystem.Forms
 {
@@ -17,7 +18,7 @@ namespace InventoryManagementSystem.Forms
         private readonly CustomerRepository _customerRepository = new CustomerRepository();
         private readonly ProductRepository _productRepository = new ProductRepository();
         private readonly InvoiceRepository _invoiceRepository = new InvoiceRepository();
-        private readonly List<CartItem> _cart = new List<CartItem>();
+        private readonly BillingService _billingService = new BillingService();
         public BillingForm()
         {
             InitializeComponent();
@@ -97,19 +98,15 @@ namespace InventoryManagementSystem.Forms
         private void RefreshCart()
         {
             dgvCart.DataSource = null;
-            dgvCart.DataSource = _cart;
+            dgvCart.DataSource = _billingService.GetCartItems();
 
         }
-        private void CalculateTotals()
+        private void LoadTotals()
         {
-            decimal subtotal = _cart.Sum(item => item.Total);
-            lblSubtotal.Text = subtotal.ToString("N2");
-            decimal discountPercent = 0;
-            decimal.TryParse(tbxDiscount.Text, out discountPercent);
-            decimal discountAmount = subtotal * (discountPercent / 100);
-            decimal grandTotal = subtotal - discountAmount;
-            lblGrandTotal.Text = grandTotal.ToString("N2");
-            CalculateChange();
+            decimal.TryParse(tbxDiscount.Text, out decimal discount);
+            BillSummary summary = _billingService.CalculateTotals(discount);
+            lblSubtotal.Text = summary.Subtotal.ToString("N2");
+            lblGrandTotal.Text = summary.GrandTotal.ToString("N2");
         }
         private void btnAddToCart_Click(object sender, EventArgs e)
         {
@@ -118,24 +115,13 @@ namespace InventoryManagementSystem.Forms
             {
                 return;
             }
-            CartItem existingItem = _cart.FirstOrDefault(item => item.ProductId == cartItem.ProductId);
-            if (existingItem != null)
-            {
-                int availableStock = Convert.ToInt32(tbxStock.Text);
-                if (existingItem.Quantity + cartItem.Quantity > availableStock)
-                {
-                    MessageBox.Show("Insufficient stock.");
-                    return;
-                }
-
-                existingItem.Quantity += cartItem.Quantity;
-            }
-            else
-            {
-                _cart.Add(cartItem);
+            int availableStock = Convert.ToInt32(tbxStock.Text);
+            if (!_billingService.AddToCart(cartItem, availableStock, out string error)) {
+                MessageBox.Show(error);
+                return;
             }
             RefreshCart();
-            CalculateTotals();
+            LoadTotals();
             ClearProductSelection();
         }
         private void ClearProductSelection()
@@ -146,7 +132,6 @@ namespace InventoryManagementSystem.Forms
             tbxQuantity.Clear();
             cbxProducts.Focus();
         }
-
         private void btnRemoveItem_Click(object sender, EventArgs e)
         {
             if (dgvCart.SelectedRows.Count == 0)
@@ -155,14 +140,14 @@ namespace InventoryManagementSystem.Forms
                 return;
             }
             CartItem cartItem = (CartItem)dgvCart.SelectedRows[0].DataBoundItem;
-            _cart.Remove(cartItem);
+            _billingService.RemoveItem(cartItem);
             RefreshCart();
-            CalculateTotals();
+            LoadTotals();
+            CalculateChange();
         }
-
         private void btnClearCart_Click(object sender, EventArgs e)
         {
-            if (_cart.Count == 0)
+            if (_billingService.GetCartItems().Count == 0)
             {
                 return;
             }
@@ -171,18 +156,19 @@ namespace InventoryManagementSystem.Forms
             {
                 return;
             }
-            _cart.Clear();
+            _billingService.ClearCart();
             tbxDiscount.Clear();
             tbxReceived.Clear();
             RefreshCart();
-            CalculateTotals();
+            LoadTotals();
+            CalculateChange();
             ClearProductSelection();
         }
         private void tbxDiscount_TextChanged(object sender, EventArgs e)
         {
-            CalculateTotals();
+            LoadTotals();
+            CalculateChange();
         }
-
         private void tbxReceived_TextChanged(object sender, EventArgs e)
         {
             CalculateChange();
