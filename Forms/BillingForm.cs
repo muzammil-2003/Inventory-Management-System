@@ -99,7 +99,7 @@ namespace InventoryManagementSystem.Forms
         {
             dgvCart.DataSource = null;
             dgvCart.DataSource = _billingService.GetCartItems();
-
+            dgvCart.ClearSelection();
         }
         private void LoadTotals()
         {

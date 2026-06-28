@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.grpInvoiceInfo = new System.Windows.Forms.GroupBox();
             this.cbxCustomer = new System.Windows.Forms.ComboBox();
@@ -48,6 +49,8 @@
             this.lblQuantity = new System.Windows.Forms.Label();
             this.lblStock = new System.Windows.Forms.Label();
             this.grpShoppingCart = new System.Windows.Forms.GroupBox();
+            this.btnClearCart = new System.Windows.Forms.Button();
+            this.btnRemoveItem = new System.Windows.Forms.Button();
             this.dgvCart = new System.Windows.Forms.DataGridView();
             this.grpTotals = new System.Windows.Forms.GroupBox();
             this.lblChange = new System.Windows.Forms.Label();
@@ -64,8 +67,6 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnPrint = new System.Windows.Forms.Button();
             this.btnSaveInvoice = new System.Windows.Forms.Button();
-            this.btnRemoveItem = new System.Windows.Forms.Button();
-            this.btnClearCart = new System.Windows.Forms.Button();
             this.tlpMain.SuspendLayout();
             this.grpInvoiceInfo.SuspendLayout();
             this.grpProductInfo.SuspendLayout();
@@ -299,23 +300,66 @@
             this.grpShoppingCart.TabStop = false;
             this.grpShoppingCart.Text = "Shopping Cart";
             // 
+            // btnClearCart
+            // 
+            this.btnClearCart.BackColor = System.Drawing.Color.OrangeRed;
+            this.btnClearCart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClearCart.FlatAppearance.BorderSize = 0;
+            this.btnClearCart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClearCart.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClearCart.ForeColor = System.Drawing.Color.White;
+            this.btnClearCart.Location = new System.Drawing.Point(877, 230);
+            this.btnClearCart.Name = "btnClearCart";
+            this.btnClearCart.Padding = new System.Windows.Forms.Padding(5);
+            this.btnClearCart.Size = new System.Drawing.Size(118, 40);
+            this.btnClearCart.TabIndex = 2;
+            this.btnClearCart.Text = "Clear Cart";
+            this.btnClearCart.UseVisualStyleBackColor = false;
+            this.btnClearCart.Click += new System.EventHandler(this.btnClearCart_Click);
+            // 
+            // btnRemoveItem
+            // 
+            this.btnRemoveItem.BackColor = System.Drawing.Color.IndianRed;
+            this.btnRemoveItem.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRemoveItem.FlatAppearance.BorderSize = 0;
+            this.btnRemoveItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRemoveItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemoveItem.ForeColor = System.Drawing.Color.White;
+            this.btnRemoveItem.Location = new System.Drawing.Point(659, 230);
+            this.btnRemoveItem.Name = "btnRemoveItem";
+            this.btnRemoveItem.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveItem.Size = new System.Drawing.Size(212, 40);
+            this.btnRemoveItem.TabIndex = 1;
+            this.btnRemoveItem.Text = "Remove Selected Item";
+            this.btnRemoveItem.UseVisualStyleBackColor = false;
+            this.btnRemoveItem.Click += new System.EventHandler(this.btnRemoveItem_Click);
+            // 
             // dgvCart
             // 
             this.dgvCart.AllowUserToAddRows = false;
             this.dgvCart.AllowUserToDeleteRows = false;
             this.dgvCart.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvCart.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvCart.BackgroundColor = System.Drawing.Color.White;
             this.dgvCart.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvCart.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvCart.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvCart.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvCart.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCart.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvCart.Dock = System.Windows.Forms.DockStyle.Top;
             this.dgvCart.EnableHeadersVisualStyles = false;
             this.dgvCart.GridColor = System.Drawing.Color.LightGray;
@@ -518,40 +562,6 @@
             this.btnSaveInvoice.TabIndex = 2;
             this.btnSaveInvoice.Text = "Save Invoice";
             this.btnSaveInvoice.UseVisualStyleBackColor = false;
-            // 
-            // btnRemoveItem
-            // 
-            this.btnRemoveItem.BackColor = System.Drawing.Color.IndianRed;
-            this.btnRemoveItem.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnRemoveItem.FlatAppearance.BorderSize = 0;
-            this.btnRemoveItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRemoveItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRemoveItem.ForeColor = System.Drawing.Color.White;
-            this.btnRemoveItem.Location = new System.Drawing.Point(659, 230);
-            this.btnRemoveItem.Name = "btnRemoveItem";
-            this.btnRemoveItem.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveItem.Size = new System.Drawing.Size(212, 40);
-            this.btnRemoveItem.TabIndex = 1;
-            this.btnRemoveItem.Text = "Remove Selected Item";
-            this.btnRemoveItem.UseVisualStyleBackColor = false;
-            this.btnRemoveItem.Click += new System.EventHandler(this.btnRemoveItem_Click);
-            // 
-            // btnClearCart
-            // 
-            this.btnClearCart.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnClearCart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnClearCart.FlatAppearance.BorderSize = 0;
-            this.btnClearCart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClearCart.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClearCart.ForeColor = System.Drawing.Color.White;
-            this.btnClearCart.Location = new System.Drawing.Point(877, 230);
-            this.btnClearCart.Name = "btnClearCart";
-            this.btnClearCart.Padding = new System.Windows.Forms.Padding(5);
-            this.btnClearCart.Size = new System.Drawing.Size(118, 40);
-            this.btnClearCart.TabIndex = 2;
-            this.btnClearCart.Text = "Clear Cart";
-            this.btnClearCart.UseVisualStyleBackColor = false;
-            this.btnClearCart.Click += new System.EventHandler(this.btnClearCart_Click);
             // 
             // BillingForm
             // 
