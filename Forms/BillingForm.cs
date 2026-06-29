@@ -19,6 +19,7 @@ namespace InventoryManagementSystem.Forms
         private readonly ProductRepository _productRepository = new ProductRepository();
         private readonly InvoiceRepository _invoiceRepository = new InvoiceRepository();
         private readonly BillingService _billingService = new BillingService();
+        private BillSummary _billSummary = new BillSummary();
         public BillingForm()
         {
             InitializeComponent();
@@ -99,14 +100,15 @@ namespace InventoryManagementSystem.Forms
         {
             dgvCart.DataSource = null;
             dgvCart.DataSource = _billingService.GetCartItems();
+            dgvCart.Columns["ProductId"].Visible = false;
             dgvCart.ClearSelection();
         }
         private void LoadTotals()
         {
             decimal.TryParse(tbxDiscount.Text, out decimal discount);
-            BillSummary summary = _billingService.CalculateTotals(discount);
-            lblSubtotal.Text = summary.Subtotal.ToString("N2");
-            lblGrandTotal.Text = summary.GrandTotal.ToString("N2");
+            _billSummary = _billingService.CalculateTotals(discount);
+            lblSubtotal.Text = _billSummary.Subtotal.ToString("N2");
+            lblGrandTotal.Text = _billSummary.GrandTotal.ToString("N2");
         }
         private void btnAddToCart_Click(object sender, EventArgs e)
         {
@@ -180,21 +182,65 @@ namespace InventoryManagementSystem.Forms
                 lblChange.Text = "0.00";
                 return;
             }
-
-            if (!decimal.TryParse(lblGrandTotal.Text, out decimal grandTotal))
-            {
-                lblChange.Text = "0.00";
-                return;
-            }
-
-            if (received < grandTotal)
+            if (received < _billSummary.GrandTotal)
             {
                 lblChange.Text = "Insufficient Payment";
                 return;
             }
-
-            decimal change = received - grandTotal;
+            decimal change = received - _billSummary.GrandTotal;
             lblChange.Text = change.ToString("N2");
+        }
+        private void btnSaveInvoice_Click(object sender, EventArgs e)
+        {
+            if (cbxCustomer.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a customer.");
+                return;
+            }
+            if (_billingService.GetCartItems().Count == 0)
+            {
+                MessageBox.Show("Cart is empty.");
+                return;
+            }
+            
+            Invoice invoice = new Invoice {
+                InvoiceNumber = lblInvoiceNo.Text,
+                CustomerId = Convert.ToInt32(cbxCustomer.SelectedValue),
+                InvoiceDate = DateTime.Now,
+                DiscountPercent = _billSummary.DiscountPercent,
+                DiscountAmount = _billSummary.DiscountAmount,
+                TotalAmount = _billSummary.GrandTotal,
+                ReceivedAmount = decimal.TryParse(tbxReceived.Text, out decimal received) ? received : 0,
+                ChangeAmount = decimal.TryParse(lblChange.Text, out decimal change) ? change : 0,
+                UserId = 0
+            };
+            try
+            {
+                _invoiceRepository.SaveInvoice(invoice, _billingService.GetCartItems());
+                MessageBox.Show("Invoice saved successfully.");
+                ResetBillingForm();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void GenerateInvoiceNumber()
+        {
+            lblInvoiceNo.Text = _invoiceRepository.GetInvoiceNumber();
+        }
+        private void ResetBillingForm()
+        {
+            _billingService.ClearCart();
+            _billSummary = new BillSummary();
+            RefreshCart();
+            LoadTotals();
+            cbxCustomer.SelectedIndex = -1;
+            tbxDiscount.Clear();
+            tbxReceived.Clear();
+            lblChange.Text = "0.00";
+            ClearProductSelection();
+            GenerateInvoiceNumber();
         }
     }
 }

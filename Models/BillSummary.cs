@@ -12,5 +12,7 @@ namespace InventoryManagementSystem.Models
         public decimal DiscountPercent { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal GrandTotal { get; set; }
+        public decimal ReceivedAmount { get; set; }
+        public decimal ChangeAmount { get; set; }
     }
 }

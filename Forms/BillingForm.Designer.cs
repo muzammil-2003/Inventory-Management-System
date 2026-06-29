@@ -562,6 +562,7 @@
             this.btnSaveInvoice.TabIndex = 2;
             this.btnSaveInvoice.Text = "Save Invoice";
             this.btnSaveInvoice.UseVisualStyleBackColor = false;
+            this.btnSaveInvoice.Click += new System.EventHandler(this.btnSaveInvoice_Click);
             // 
             // BillingForm
             // 
